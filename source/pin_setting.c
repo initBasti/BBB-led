@@ -40,7 +40,11 @@ int getValue(char path[], char descriptor[])
 		return -1;
 	}
 	if(fgets(result, 5, file) == NULL) {
+		fprintf(stderr, "No output\n");
 		return -1;
+	}
+	if(result[strnlen(result, 5)-1] == '\n') {
+		result[strnlen(result, 5)-1] = '\0';
 	}
 
 	if(strncmp(result, "in", 5) == 0 || strncmp(result, "0", 5) == 0) {
