@@ -51,9 +51,13 @@ $(PATHBIN)$(BIN_NAME): $(OBJECTS)
 	@echo "Linking: $@"
 	$(LINK) $(OBJECTS) -o $@ -lgpio
 
-$(PATHO)%.o:: $(PATHS)%.c
+$(LIB_OBJECTS):: $(LIB_SOURCES)
 	@echo "Compiling: $< -> $@"
 	$(COMPILE) $(INCLUDES) $< -o $@
+
+$(OBJECTS): $(SOURCES)
+	@echo "Compiling: $< -> $@"
+	$(COMPILE) $(INCLUDES) $< -o $@ -lgpio
 
 $(PATHD)%.d:: $(PATHS)%.c | $(PATHD)
 	$(DEPEND) -o $@ $<
