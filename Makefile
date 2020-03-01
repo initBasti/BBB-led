@@ -7,7 +7,7 @@ LIB_EXTENSION=so
 .PHONY: clean
 .PHONY: test
 
-BIN_NAME = blinkled
+BIN_NAME = gpioprog
 LIB_NAME = libgpio
 CASCADE_0 = 1.0
 CASCADE_1 = 1
@@ -23,8 +23,8 @@ LIB_PATH = /usr/lib/
 
 LIB_SOURCES := $(filter-out $(PATHS)main.c, $(wildcard $(PATHS)*.c))
 SOURCES = $(PATHS)main.c
-OBJECTS := $(LIB_SOURCES:$(PATHS)%.c=$(PATHO)%.o)
-LIB_OBJECTS := $(SOURCES:$(PATHS)%.c=$(PATHO)%.o)
+LIB_OBJECTS := $(LIB_SOURCES:$(PATHS)%.c=$(PATHO)%.o)
+OBJECTS := $(SOURCES:$(PATHS)%.c=$(PATHO)%.o)
 DEPS := $(SOURCES:$(PATHS)%.c=$(PATHD)%.d)
 LIB_DEPS := $(LIB_SOURCES:$(PATHS)%.c=$(PATHD)%.d)
 
