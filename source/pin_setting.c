@@ -208,7 +208,7 @@ int resetGpio(struct gpio* gpio)
 	if((value=getDirection(gpio)) < 0) {
 		return -1;
 	}
-	if(value == 0) {
+	if(value == 1) {
 		if(setValue(gpio, 0) < 0) {
 			return -1;
 		}
