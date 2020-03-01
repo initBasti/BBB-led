@@ -29,6 +29,7 @@ int blinkLED(struct gpio *gpio, int repeat, int speed)
 			perror("sleep timer failed");
 			return -1;
 		}
+		i++;
 	}	
 	return 0;
 }

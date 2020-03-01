@@ -58,7 +58,11 @@ int getValue_generic(char path[], char descriptor[])
 		return -1;
 	}
 	if(fgets(result, 5, file) == NULL) {
+		fprintf(stderr, "No output\n");
 		return -1;
+	}
+	if(result[strnlen(result, 5)-1] == '\n') {
+		result[strnlen(result, 5)-1] = '\0';
 	}
 
 	if(strncmp(result, "in", MAX_TYPE) == 0 || strncmp(descriptor, "direction", 10) == 0) {
