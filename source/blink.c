@@ -1,8 +1,8 @@
-#include "include/blink.h"
+#include "include/libgpio.h"
 
 unsigned int getSleepTime(int);
 
-int blinkLED(char path[], int repeat, int speed)
+int blinkLED(struct gpio *gpio, int repeat, int speed)
 {
 	int i = 0 ;
 	int value = -1;
@@ -12,15 +12,15 @@ int blinkLED(char path[], int repeat, int speed)
 	sleeptime = getSleepTime(speed);
 
 	while(i < repeat) {
-		if((value = getValue(path, "value")) != -1) {
+		if((value = getValue(gpio)) != -1) {
 			switch(value) {
 				case 0:
-					if(setValue(path, "value", "1") < 0) {
+					if(setValue(gpio, 1) < 0) {
 						return -1;
 					}
 					break;
 				case 1:
-					if(setValue(path, "value", "0") < 0) {
+					if(setValue(gpio, 0) < 0) {
 						return -1;
 					}
 			}
