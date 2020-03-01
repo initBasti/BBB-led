@@ -122,9 +122,7 @@ permission_invalid:
 int buildPath(char base_path[], char gpio_id[], char out_path[])
 {
 	struct stat buffer;
-	if(snprintf(out_path, PATH_MAX, "%s/gpio%s", base_path, gpio_id) > 0) {
-		fprintf(stderr, "path truncated: %s\n", out_path);
-	}	
+	snprintf(out_path, PATH_MAX, "%s/gpio%s", base_path, gpio_id);
 
 	return stat(out_path, &buffer);
 }
