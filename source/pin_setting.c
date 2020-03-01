@@ -1,5 +1,7 @@
 #include "include/libgpio.h"
 
+int gpioState(char[], char[]);
+
 int setValue_generic(char path[], char descriptor[], char value[])
 {
 	char command[MAX_COMMAND] = {0};
@@ -47,6 +49,7 @@ int getValue_generic(char path[], char descriptor[])
 	FILE *file = NULL;
 	char msg[MAX_COMMAND+15] = {0};
 	char result[5] = {0};
+	int state = 0;
 	int return_value = -1;
 	errno = 0;
 
@@ -65,17 +68,13 @@ int getValue_generic(char path[], char descriptor[])
 		result[strnlen(result, 5)-1] = '\0';
 	}
 
-	if(strncmp(result, "in", MAX_TYPE) == 0 || strncmp(descriptor, "direction", 10) == 0) {
-		return_value = 0;	
-	}
-	if(strncmp(result, "0", 2) == 0 || strncmp(descriptor, "value", 7) == 0) {
-		return_value = 0;	
-	}
-	if(strncmp(result, "out", MAX_TYPE) == 0 || strncmp(descriptor, "direction", 10) == 0) {
-		return_value = 0;	
-	}
-	if(strncmp(result, "1", 2) == 0 || strncmp(descriptor, "value", 7) == 0) {
-		return_value = 0;	
+	state = gpioState(result, descriptor);
+	switch(state) {
+		case 0:
+		case 1:
+			return_value = state;
+		default:
+			return -1;
 	}
 	if(fclose(file) < 0) {
 		snprintf(msg, MAX_COMMAND+15, "Error at %s", full_path);
@@ -83,6 +82,43 @@ int getValue_generic(char path[], char descriptor[])
 		return -1;
 	}
 	return return_value;
+}
+
+/**
+ * @brief	boolean for the status of the gpio value or direction
+ *
+ * @param[in]	input	result of getValue_generic
+ * @param[in]	type	either value or direction
+ *
+ * @retval	0	state OFF for value / input for direction
+ * @retval	1	state ON for value / output for direction
+ * @retval	-1	invalid value
+ */
+int gpioState(char input[], char type[])
+{
+	if(strncmp(type, "value", 6) == 0) {
+		if(strncmp(input, "0", 2) == 0) {
+			return 0;
+		}	
+		else if(strncmp(input, "1", 2) == 0) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
+	}	
+	else if(strncmp(type, "direction", 10) == 0) {
+		if(strncmp(input, "in", 3) == 0) {
+			return 0;
+		}	
+		else if(strncmp(input, "out", 4) == 0) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
+	}
+	return -1;
 }
 
 int getValue(struct gpio* gpio)
