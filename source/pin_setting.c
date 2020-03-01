@@ -152,8 +152,10 @@ int initGpio(struct gpio* gpio, char base_path[], char id[], char expect_type[])
 	if(setDirection(gpio, gpio->expect_type) < 0) {
 		return -1;
 	}
-	if(setValue(gpio, 0) < 0) {
-		return -1;
+	if(strncmp(gpio->expect_type, "out", 4) == 0) {
+		if(setValue(gpio, 0) < 0) {
+			return -1;
+		}
 	}
 	return 0;
 }
