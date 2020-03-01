@@ -73,6 +73,7 @@ int getValue_generic(char path[], char descriptor[])
 		case 0:
 		case 1:
 			return_value = state;
+			break;
 		default:
 			return -1;
 	}
@@ -198,13 +199,19 @@ int initGpio(struct gpio* gpio, char base_path[], char id[], char expect_type[])
 
 int resetGpio(struct gpio* gpio)
 {
+	int value = -1;
 	if(!gpio) {
 		fprintf(stderr, "Gpio struct pointer to NULL\n");
 		return -1;
 	}		
-
-	if(setValue(gpio, 0) < 0) {
+	
+	if((value=getDirection(gpio)) < 0) {
 		return -1;
+	}
+	if(value == 0) {
+		if(setValue(gpio, 0) < 0) {
+			return -1;
+		}
 	}
 	if(setDirection(gpio, "in") < 0) {
 		return -1;
