@@ -42,9 +42,15 @@ int pollSwitch(struct gpio *input[], struct gpio *output[], int ni, int no)
 
 			if(value == ON) {
 				switch_on[i] = 1;
-				if(toggleValue(output[i]) == -1) {
+				//if(toggleValue(output[i]) == -1) {
+				//	return -1;
+				//}
+				if(blinkLED(output[i], 8, 3) < 0) {
 					return -1;
 				}
+			}
+			else if(value == OFF) {
+				switch_on[i] = 0;
 			}
 		}	
 		if(stopSignal(ni, switch_on)) {
@@ -52,7 +58,7 @@ int pollSwitch(struct gpio *input[], struct gpio *output[], int ni, int no)
 		}
 		memset(switch_on, 0, ni);
 
-		if(usleep(25000) < 0) {
+		if(usleep(250000) < 0) {
 			return -1;
 		}
 	}
